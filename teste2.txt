@@ -1,0 +1,4 @@
+HeapSort: -> Total de elementos ordenados: 10 -> Total de comparações: 0 -> Total de cópias: 0 -> Tempo total gasto: 1e-05
+HeapSort: -> Total de elementos ordenados: 10 -> Total de comparações: 0 -> Total de cópias: 0 -> Tempo total gasto: 1.8e-05
+HeapSort: -> Total de elementos ordenados: 10 -> Total de comparações: 0 -> Total de cópias: 0 -> Tempo total gasto: 1e-05
+Quicksort recursivo mediana -> Total de elementos ordenados: 10 -> Total de comparações: 40 -> Total de cópias: 30 -> Tempo total gasto: 1.7e-05

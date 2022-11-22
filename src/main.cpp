@@ -17,8 +17,8 @@ bool validaOpcoes(const string& versao, const string& semente,
                   const string& numeroDeElementosMediana,
                   const string& tamanhoParticao) {
     if (versao.empty() || (versao != "1" && versao != "2" && versao != "3" &&
-                           versao != "4" && versao != "5")) {
-        cerr << "É necessário fornecer um argumento entre 1 e 5 para opção v. Ex: "
+                           versao != "4" && versao != "5" && versao != "6" && versao != "7")) {
+        cerr << "É necessário fornecer um argumento entre 1 e 7 para opção v. Ex: "
                 "-v 1."
              << endl;
         return false;
@@ -51,6 +51,15 @@ bool validaOpcoes(const string& versao, const string& semente,
     return true;
 }
 
+void escreveOResultadoNoArquivoDeSaida(const string& nomeArquivoDeSaida, const AnaliseQuicksort& parametrosDaOrdenacao) {
+    ofstream arquivoDeSaida;
+    arquivoDeSaida.open(nomeArquivoDeSaida, ios::app);
+    arquivoDeSaida << parametrosDaOrdenacao.nomeDaVersao << " -> Total de elementos ordenados: " << parametrosDaOrdenacao.numeroDeElementosOrdenados <<
+     " -> Total de comparações: " << parametrosDaOrdenacao.numeroDeComparacoes <<
+      " -> Total de cópias: " << parametrosDaOrdenacao.numeroDeCopias << 
+      " -> Tempo total gasto: " << parametrosDaOrdenacao.tempoTotalGastoPraOrdenar << endl;
+}
+
 void defineASementeParaGerarNumeros(const int& sementeEmInteiro) {
     srand(sementeEmInteiro);
 }
@@ -71,26 +80,36 @@ bool lidaComArquivoDeEntrada(const string& versao,
 
     string linha;
     int posicaoDaLinha = 0;
-    int quantidadeDeLinhas;
     int quantidadeDeElementosQueSeraoCriados;
 
     while (!arquivoDeEntrada.eof()) {
         if (posicaoDaLinha == 0) {
             getline(arquivoDeEntrada, linha);
-            quantidadeDeLinhas = stoi(linha);
+        
         } else {
             getline(arquivoDeEntrada, linha);
             quantidadeDeElementosQueSeraoCriados = stoi(linha);
             Elemento* elementos = new Elemento[quantidadeDeElementosQueSeraoCriados];
-            for (int i = 0; i < quantidadeDeElementosQueSeraoCriados; i++) {
+            cout << "Elementos sem ordenação:" << endl;
+            for (int i = 0; i < quantidadeDeElementosQueSeraoCriados; i++)
+            {
                 cout << elementos[i].getChave() << endl;
             }
-            cout << endl;
-            ordenaComQuicksortAPartirDaVersao(elementos, quantidadeDeElementosQueSeraoCriados, versao, numeroDeElementosMediana, tamanhoParticao);
-            cout << "Elementos ordenados:" << endl;
-            for (size_t i = 0; i < quantidadeDeElementosQueSeraoCriados; i++) {
+
+            AnaliseQuicksort* metricas = new AnaliseQuicksort();
+            
+            ordenaAPartirDaVersao(elementos, quantidadeDeElementosQueSeraoCriados, versao, numeroDeElementosMediana, tamanhoParticao, metricas);
+
+            cout << "Elementos com ordenação:" << endl;
+            for (int i = 0; i < quantidadeDeElementosQueSeraoCriados; i++)
+            {
                 cout << elementos[i].getChave() << endl;
             }
+            
+            escreveOResultadoNoArquivoDeSaida(nomeArquivoDeSaida, *(metricas));
+            delete[] elementos;
+            delete metricas;
+
         }
         posicaoDaLinha++;
     }
@@ -150,5 +169,6 @@ int main(int argc, char* argv[]) {
     bool conseguiuAbrirOArquivoDeEntrada = lidaComArquivoDeEntrada(versao, semente, nomeArquivoDeEntrada, nomeArquivoDeSaida, numeroDeElementosMediana, tamanhoParticao);
     if (!conseguiuAbrirOArquivoDeEntrada) {
         cerr << "O programa foi encerrado. Verifique o arquivo de entrada " << nomeArquivoDeEntrada << endl;
+        return 0;
     }
 }

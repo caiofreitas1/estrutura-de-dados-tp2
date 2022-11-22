@@ -9,3 +9,7 @@ Elemento::Elemento() {
 int Elemento::getChave() {
     return this->chave;
 }
+
+void Elemento::setChave(int chave) {
+    this->chave = chave;
+}

@@ -5,6 +5,7 @@ class Elemento {
    public:
     Elemento();
     int getChave();
+    void setChave(int chave);
 
    private:
     int chave;
